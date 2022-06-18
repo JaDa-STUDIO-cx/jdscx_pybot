@@ -63,10 +63,14 @@ if name != 'ERROR':
         ##->Fetch the media url
         url = 'https://api.twitter.com/2/tweets?ids='+id+'&expansions=attachments.media_keys&media.fields=duration_ms,height,media_key,preview_image_url,public_metrics,type,url,width,alt_text'
         response = requests.get(url, headers={'Authorization' : 'Bearer '+vT_Bearer+''})
-        photo = loads(response.text)['includes']['media'][0]['url']
+        if  'includes' in response.text:
+            photo = loads(response.text)['includes']['media'][0]['url']
+        else:
+            photo =''
+
     else:
         name = 'ERROR'
-
+#
 if name!= 'ERROR':
     ##### Discord-Send via webhook
     webhook = DiscordWebhook(url=webhook_url, content='@here \n'+vcontent+'\n\nhttps://twitter.com/'+vT_Username+'/status/'+id)
